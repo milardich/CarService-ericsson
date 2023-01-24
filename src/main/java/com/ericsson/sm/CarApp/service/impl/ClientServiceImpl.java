@@ -7,6 +7,8 @@ import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,5 +80,15 @@ public class ClientServiceImpl implements ClientService {
             clientResponseDto.setCountry(client.getCountry());
         }
         return clientResponseDto;
+    }
+
+    @Override
+    public ResponseEntity<String> deleteById(Long id) {
+        Client client = clientRepository.findById(id).orElse(null);
+        if(client == null){
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        clientRepository.deleteById(id);
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 }
