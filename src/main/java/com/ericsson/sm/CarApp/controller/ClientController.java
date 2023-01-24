@@ -5,10 +5,8 @@ import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -24,5 +22,10 @@ public class ClientController {
     @GetMapping("/api/customers")
     public List<AllClientsResponseDto> getAll(){
         return clientService.getAll();
+    }
+
+    @GetMapping("/api/customers/{id}")
+    public ClientResponseDto findById(@PathVariable Long id){
+        return clientService.findById(id);
     }
 }
