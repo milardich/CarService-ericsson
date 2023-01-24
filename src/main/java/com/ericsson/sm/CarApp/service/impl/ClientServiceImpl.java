@@ -91,4 +91,25 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.deleteById(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> updateById(Long id, ClientRequestDto clientRequestDto) {
+        Client client = clientRepository.findById(id).orElse(null);
+        if(client == null){
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        client.setFirstName(clientRequestDto.getFirstName());
+        client.setLastName(clientRequestDto.getLastName());
+        client.setOib(clientRequestDto.getOib());
+        client.setCity(clientRequestDto.getCity());
+        client.setStreet(clientRequestDto.getStreet());
+        client.setNumber(clientRequestDto.getNumber());
+        client.setZipCode(clientRequestDto.getZipCode());
+        client.setCountry(clientRequestDto.getCountry());
+
+        clientRepository.save(client);
+
+        return new ResponseEntity<>("User updated", HttpStatus.OK);
+    }
 }
