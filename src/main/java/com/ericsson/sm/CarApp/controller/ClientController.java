@@ -34,4 +34,9 @@ public class ClientController {
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         return clientService.deleteById(id);
     }
+
+    @PutMapping("/api/customers/{id}")
+    public ClientResponseDto updateById(@PathVariable Long id, @RequestBody ClientRequestDto clientRequestDto){
+        return clientService.updateById(id, clientRequestDto);
+    }
 }
