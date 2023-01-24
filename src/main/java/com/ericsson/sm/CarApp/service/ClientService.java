@@ -14,5 +14,5 @@ public interface ClientService {
     List<AllClientsResponseDto> getAll();
     ClientResponseDto findById(Long id);
     ResponseEntity<String> deleteById(Long id);
-    ResponseEntity<String> updateById(Long id, ClientRequestDto clientRequestDto);
+    ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto);
 }

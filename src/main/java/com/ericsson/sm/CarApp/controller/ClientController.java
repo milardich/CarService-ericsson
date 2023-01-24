@@ -36,7 +36,7 @@ public class ClientController {
     }
 
     @PutMapping("/api/customers/{id}")
-    public ResponseEntity<String> updateById(@PathVariable Long id, @RequestBody ClientRequestDto clientRequestDto){
+    public ClientResponseDto updateById(@PathVariable Long id, @RequestBody ClientRequestDto clientRequestDto){
         return clientService.updateById(id, clientRequestDto);
     }
 }

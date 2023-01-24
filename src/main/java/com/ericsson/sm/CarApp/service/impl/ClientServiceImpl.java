@@ -93,11 +93,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ResponseEntity<String> updateById(Long id, ClientRequestDto clientRequestDto) {
+    public ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto) {
         Client client = clientRepository.findById(id).orElse(null);
-        if(client == null){
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
 
         client.setFirstName(clientRequestDto.getFirstName());
         client.setLastName(clientRequestDto.getLastName());
@@ -108,8 +105,18 @@ public class ClientServiceImpl implements ClientService {
         client.setZipCode(clientRequestDto.getZipCode());
         client.setCountry(clientRequestDto.getCountry());
 
-        clientRepository.save(client);
+        Client savedClient = clientRepository.save(client);
 
-        return new ResponseEntity<>("User updated", HttpStatus.OK);
+        ClientResponseDto clientResponseDto = new ClientResponseDto();
+        clientResponseDto.setFirstName(savedClient.getFirstName());
+        clientResponseDto.setLastName(savedClient.getLastName());
+        clientResponseDto.setOib(savedClient.getOib());
+        clientResponseDto.setCity(savedClient.getCity());
+        clientResponseDto.setStreet(savedClient.getStreet());
+        clientResponseDto.setNumber(savedClient.getNumber());
+        clientResponseDto.setZipCode(savedClient.getZipCode());
+        clientResponseDto.setCountry(savedClient.getCountry());
+
+        return clientResponseDto;
     }
 }
