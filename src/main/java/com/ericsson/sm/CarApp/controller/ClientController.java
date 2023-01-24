@@ -5,6 +5,7 @@ import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,5 +28,10 @@ public class ClientController {
     @GetMapping("/api/customers/{id}")
     public ClientResponseDto findById(@PathVariable Long id){
         return clientService.findById(id);
+    }
+
+    @DeleteMapping("/api/customers/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
+        return clientService.deleteById(id);
     }
 }
