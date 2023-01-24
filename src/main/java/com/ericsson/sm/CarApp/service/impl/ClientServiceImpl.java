@@ -1,21 +1,22 @@
 package com.ericsson.sm.CarApp.service.impl;
 
+import com.ericsson.sm.CarApp.dto.AllClientsResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
-
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
-
 
     @Override
     public ClientResponseDto save(ClientRequestDto clientRequestDto) {
@@ -27,7 +28,7 @@ public class ClientServiceImpl implements ClientService {
         client.setStreet(clientRequestDto.getStreet());
         client.setZipCode(clientRequestDto.getZipCode());
         client.setCountry(clientRequestDto.getCountry());
-        //client.setNumber(clientRequestDto.getNumber());
+        client.setNumber(clientRequestDto.getNumber());
 
         Client savedClient = clientRepository.save(client);
 
@@ -39,8 +40,9 @@ public class ClientServiceImpl implements ClientService {
         clientResponseDto.setStreet(savedClient.getStreet());
         clientResponseDto.setZipCode(savedClient.getZipCode());
         clientResponseDto.setCountry(savedClient.getCountry());
-        //clientResponseDto.setNumber(savedClient.getNumber());
+        clientResponseDto.setNumber(savedClient.getNumber());
 
         return clientResponseDto;
     }
+
 }

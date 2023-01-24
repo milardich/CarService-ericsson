@@ -1,5 +1,8 @@
 package com.ericsson.sm.CarApp.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,78 +15,43 @@ public class Client {
     private Long id;
 
     @Column(name = "first_name")
+    @Getter
+    @Setter
     private String firstName;
+
     @Column(name = "last_name")
+    @Getter
+    @Setter
     private String lastName;
+
     @Column(name = "oib")
+    @Getter
+    @Setter
     private String oib;
+
     @Column(name = "city")
+    @Getter
+    @Setter
     private String city;
+
     @Column(name = "street")
+    @Getter
+    @Setter
     private String street;
 
+    @Column(name = "street_number")
+    @Getter
+    @Setter
+    private String number;
+
     @Column(name = "zip_code")
+    @Getter
+    @Setter
     private String zipCode;
+
     @Column(name = "country")
+    @Getter
+    @Setter
     private String country;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getOib() {
-        return oib;
-    }
-
-    public void setOib(String oib) {
-        this.oib = oib;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
 }
