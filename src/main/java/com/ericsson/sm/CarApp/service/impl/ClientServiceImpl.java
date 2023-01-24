@@ -8,7 +8,6 @@ import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,4 +44,22 @@ public class ClientServiceImpl implements ClientService {
         return clientResponseDto;
     }
 
+    @Override
+    public List<AllClientsResponseDto> getAll() {
+        List<Client> allClients = clientRepository.findAll();
+        List<AllClientsResponseDto> savedClients = new ArrayList<>();
+        for(Client client : allClients){
+            AllClientsResponseDto allClientsResponseDto = new AllClientsResponseDto();
+            allClientsResponseDto.setFirstName(client.getFirstName());
+            allClientsResponseDto.setLastName(client.getLastName());
+            allClientsResponseDto.setOib(client.getOib());
+            allClientsResponseDto.setCity(client.getCity());
+            allClientsResponseDto.setStreet(client.getStreet());
+            allClientsResponseDto.setNumber(client.getNumber());
+            allClientsResponseDto.setZipCode(client.getZipCode());
+            allClientsResponseDto.setCountry(client.getCountry());
+            savedClients.add(allClientsResponseDto);
+        }
+        return savedClients;
+    }
 }
