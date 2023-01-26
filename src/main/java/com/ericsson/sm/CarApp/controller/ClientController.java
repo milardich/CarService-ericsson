@@ -1,6 +1,5 @@
 package com.ericsson.sm.CarApp.controller;
 
-import com.ericsson.sm.CarApp.dto.AllClientsResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.service.ClientService;
@@ -21,7 +20,7 @@ public class ClientController {
     }
 
     @GetMapping("/api/customers")
-    public List<AllClientsResponseDto> getAll(){
+    public List<ClientResponseDto> getAll(){
         return clientService.getAll();
     }
 
