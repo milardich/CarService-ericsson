@@ -44,7 +44,7 @@ public class ClientDtoMapper {
         return dto;
     }
 
-    public Client toClient(Long id, ClientRequestDto dto){
+    public Client toEntity(Long id, ClientRequestDto dto){
         Client client = clientRepository.findById(id).orElse(null);
 
         client.setFirstName(dto.getFirstName());
@@ -59,7 +59,7 @@ public class ClientDtoMapper {
         return client;
     }
 
-    public Client toClient(ClientRequestDto dto){
+    public Client toEntity(ClientRequestDto dto){
         Client client = new Client();
 
         client.setFirstName(dto.getFirstName());

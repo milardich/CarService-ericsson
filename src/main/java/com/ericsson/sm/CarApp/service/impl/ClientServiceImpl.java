@@ -23,7 +23,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto save(ClientRequestDto clientRequestDto) {
-        Client client = clientDtoMapper.toClient((clientRequestDto));
+        Client client = clientDtoMapper.toEntity((clientRequestDto));
         Client savedClient = clientRepository.save(client);
         return clientDtoMapper.toDto(savedClient);
     }
@@ -61,7 +61,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto) {
-        Client client = clientDtoMapper.toClient(id, clientRequestDto);
+        Client client = clientDtoMapper.toEntity(id, clientRequestDto);
         ClientResponseDto clientResponseDto;
         Client savedClient = clientRepository.save(client);
         clientResponseDto = clientDtoMapper.toDto(savedClient);
