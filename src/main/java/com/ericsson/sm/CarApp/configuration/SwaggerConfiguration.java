@@ -18,40 +18,26 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Getter
 @Setter
-@Configuration
 @EnableSwagger2
 @ConfigurationProperties(prefix = "swagger")
-public class SwaggerConfiguration {
-    private String title;
-    private String description;
-    private String version;
-    private String termsOfServiceUrl;
-    private String license;
-    private String licenseUrl;
-    private String contactName;
-    private String contactUrl;
-    private String contactEmail;
-    private String basePackage;
+@Configuration
+@EnableWebMvc
+public class SwaggerConfiguration implements WebMvcConfigurer {
 
-    @Configuration
-    @EnableWebMvc
-    public class SwaggerConfig implements WebMvcConfigurer {
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                .apis(RequestHandlerSelectors.basePackage("com.ericsson.sm.CarApp"))
+                .paths(PathSelectors.regex("/.*"))
+                .build().apiInfo(apiInfoMetaData());
+    }
 
-        @Bean
-        public Docket api() {
-            return new Docket(DocumentationType.SWAGGER_2).select()
-                    .apis(RequestHandlerSelectors.basePackage("com.ericsson.sm.CarApp"))
-                    .paths(PathSelectors.regex("/.*"))
-                    .build().apiInfo(apiInfoMetaData());
-        }
+    private ApiInfo apiInfoMetaData() {
 
-        private ApiInfo apiInfoMetaData() {
-
-            return new ApiInfoBuilder().title("CarService")
-                    .description("API Endpoint Decoration")
-                    .contact(new Contact("smilardic", "-", "stjepan.milardic@ericsson.com"))
-                    .version("1.0.0")
-                    .build();
-        }
+        return new ApiInfoBuilder().title("CarService")
+                .description("CarService API Endpoint Decoration")
+                .contact(new Contact("smilardic", "-", "stjepan.milardic@ericsson.com"))
+                .version("1.0.0")
+                .build();
     }
 }
