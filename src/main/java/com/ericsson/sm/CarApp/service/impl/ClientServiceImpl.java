@@ -27,7 +27,7 @@ public class ClientServiceImpl implements ClientService {
         return clientDtoMapper.toDto(savedClient);
     }
 
-    @Overrides
+    @Override
     public List<ClientResponseDto> getAll() {
         List<Client> allClients = clientRepository.findAll();
         List<ClientResponseDto> savedClients = new ArrayList<>();
