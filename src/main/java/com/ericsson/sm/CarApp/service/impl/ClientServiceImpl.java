@@ -1,6 +1,5 @@
 package com.ericsson.sm.CarApp.service.impl;
 
-import com.ericsson.sm.CarApp.dto.AllClientsResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.model.Client;
@@ -28,13 +27,13 @@ public class ClientServiceImpl implements ClientService {
         return clientDtoMapper.toDto(savedClient);
     }
 
-    @Override
-    public List<AllClientsResponseDto> getAll() {
+    @Overrides
+    public List<ClientResponseDto> getAll() {
         List<Client> allClients = clientRepository.findAll();
-        List<AllClientsResponseDto> savedClients = new ArrayList<>();
+        List<ClientResponseDto> savedClients = new ArrayList<>();
         for(Client client : allClients){
-            AllClientsResponseDto allClientsResponseDto = clientDtoMapper.allClientsResponseToDto(client);
-            savedClients.add(allClientsResponseDto);
+            ClientResponseDto clientResponseDto = clientDtoMapper.toDto(client);
+            savedClients.add(clientResponseDto);
         }
         return savedClients;
     }

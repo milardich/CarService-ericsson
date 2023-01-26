@@ -1,6 +1,5 @@
 package com.ericsson.sm.CarApp.service.mapper;
 
-import com.ericsson.sm.CarApp.dto.AllClientsResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.model.Client;
@@ -16,21 +15,6 @@ public class ClientDtoMapper {
 
     public ClientResponseDto toDto(Client client){
         ClientResponseDto dto = new ClientResponseDto();
-
-        dto.setFirstName(client.getFirstName());
-        dto.setLastName(client.getLastName());
-        dto.setOib(client.getOib());
-        dto.setCity(client.getCity());
-        dto.setStreet(client.getStreet());
-        dto.setNumber(client.getNumber());
-        dto.setZipCode(client.getZipCode());
-        dto.setCountry(client.getCountry());
-
-        return dto;
-    }
-
-    public AllClientsResponseDto allClientsResponseToDto(Client client){
-        AllClientsResponseDto dto = new AllClientsResponseDto();
 
         dto.setFirstName(client.getFirstName());
         dto.setLastName(client.getLastName());
