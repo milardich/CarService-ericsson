@@ -29,7 +29,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Page<ClientResponseDto> getAll(String firstName, String lastName, Pageable pageable) {
-        return clientRepository.findAllByFirstNameOrLastName(
+        return clientRepository.findByFirstOrLastName_sortedByLastNameASC(
                 firstName, lastName, pageable
         ).map(clientDtoMapper::toDto);
     }
