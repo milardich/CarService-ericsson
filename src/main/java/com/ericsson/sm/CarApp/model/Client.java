@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "clients")
@@ -17,7 +18,6 @@ public class Client {
     private Long id;
 
     @Column(name = "first_name")
-
     private String firstName;
 
     @Column(name = "last_name")
@@ -41,4 +41,6 @@ public class Client {
     @Column(name = "country")
     private String country;
 
+    @OneToMany(mappedBy = "client")
+    private List<Car> cars;
 }
