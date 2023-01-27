@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class CarRequestDto {
     private Long id;
-    //private Client client;
     private Long clientId;
     private CarType carType;
     private Integer manufactureYear;

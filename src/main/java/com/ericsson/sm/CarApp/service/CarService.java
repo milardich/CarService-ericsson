@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface CarService {
-    public CarResponseDto save(CarRequestDto carRequestDto);
-    public List<CarRequestDto> getAll();
-    public CarRequestDto findById(Long id);
-    public ResponseEntity<String> deleteById(Long id);
-    public CarRequestDto updateById(Long id);
+    CarResponseDto save(CarRequestDto carRequestDto);
+    List<CarResponseDto> getAll();
+    CarResponseDto findById(Long id);
+    ResponseEntity<String> deleteById(Long id);
+    CarResponseDto updateById(Long id);
 }

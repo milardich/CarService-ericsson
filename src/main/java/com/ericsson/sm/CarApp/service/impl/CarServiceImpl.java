@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,12 +28,18 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarRequestDto> getAll() {
-        return null;
+    public List<CarResponseDto> getAll() {
+        List<Car> cars = carRepository.findAll();
+        List<CarResponseDto> savedCars = new ArrayList<>();
+        for(Car car : cars){
+            CarResponseDto carResponseDto = carDtoMapper.toDto(car);
+            savedCars.add(carResponseDto);
+        }
+        return savedCars;
     }
 
     @Override
-    public CarRequestDto findById(Long id) {
+    public CarResponseDto findById(Long id) {
         return null;
     }
 
@@ -42,7 +49,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarRequestDto updateById(Long id) {
+    public CarResponseDto updateById(Long id) {
         return null;
     }
 }
