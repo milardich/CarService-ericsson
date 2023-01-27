@@ -52,7 +52,9 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarResponseDto updateById(Long id) {
-        return null;
+    public CarResponseDto updateById(Long id, CarRequestDto carRequestDto) {
+        Car car = carDtoMapper.toEntity(id, carRequestDto);
+        Car savedCar = carRepository.save(car);
+        return carDtoMapper.toDto(savedCar);
     }
 }

@@ -33,4 +33,9 @@ public class CarController {
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         return carService.deleteById(id);
     }
+
+    @PutMapping("/api/cars/{id}")
+    public CarResponseDto updateById(@PathVariable Long id, @RequestBody CarRequestDto carRequestDto) {
+        return carService.updateById(id, carRequestDto);
+    }
 }
