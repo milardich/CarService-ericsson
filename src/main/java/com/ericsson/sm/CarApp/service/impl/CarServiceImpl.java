@@ -40,7 +40,9 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponseDto findById(Long id) {
-        return null;
+        Car car = carRepository.findById(id).orElse(null);
+        CarResponseDto savedCar = carDtoMapper.toDto(car);
+        return savedCar;
     }
 
     @Override
