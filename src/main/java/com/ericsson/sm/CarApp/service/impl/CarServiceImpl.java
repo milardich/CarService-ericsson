@@ -11,6 +11,8 @@ import com.ericsson.sm.CarApp.service.CarService;
 import com.ericsson.sm.CarApp.service.mapper.CarDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,5 +52,14 @@ public class CarServiceImpl implements CarService {
     public CarResponseDto findById(Long id) {
         Car car = carRepository.findById(id).orElse(null);
         return carDtoMapper.toDto(car);
+    }
+
+    @Override
+    public ResponseEntity<String> deleteById(Long clientId, Long carId) {
+        Client client = clientRepository.findById(clientId).orElse(null);
+        Car car = carRepository.findById(carId).orElse(null);
+        client.getCars().remove(car);
+        carRepository.deleteById(carId);
+        return new ResponseEntity<>("Car deleted", HttpStatus.OK);
     }
 }
