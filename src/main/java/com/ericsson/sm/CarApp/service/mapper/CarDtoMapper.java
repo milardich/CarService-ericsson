@@ -33,9 +33,6 @@ public class CarDtoMapper {
         car.setCarType(dto.getCarType());
         car.setColor(dto.getColor());
 
-        Client client = clientRepository.findById(dto.getClientId()).orElse(null);
-        car.setClient(client);
-
         car.setManufactureYear(dto.getManufactureYear());
         car.setRegistrationMark(dto.getRegistrationMark());
 
@@ -47,9 +44,6 @@ public class CarDtoMapper {
 
         car.setCarType(dto.getCarType());
         car.setColor(dto.getColor());
-
-        Client client = clientRepository.findById(dto.getClientId()).orElse(null);
-        car.setClient(client);
 
         car.setManufactureYear(dto.getManufactureYear());
         car.setRegistrationMark(dto.getRegistrationMark());

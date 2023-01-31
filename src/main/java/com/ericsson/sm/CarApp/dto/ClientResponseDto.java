@@ -1,13 +1,15 @@
 package com.ericsson.sm.CarApp.dto;
 
+import com.ericsson.sm.CarApp.model.Car;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
 @Setter
 public class ClientResponseDto {
-
     private String firstName;
     private String lastName;
     private String oib;
@@ -16,4 +18,5 @@ public class ClientResponseDto {
     private String number;
     private String zipCode;
     private String country;
+    private List<Car> cars;
 }

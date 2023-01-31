@@ -7,8 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CarRequestDto {
-    private Long id;
-    private Long clientId;
     private CarType carType;
     private Integer manufactureYear;
     private String registrationMark;
