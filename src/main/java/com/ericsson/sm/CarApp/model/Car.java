@@ -1,6 +1,7 @@
 package com.ericsson.sm.CarApp.model;
 
 import com.ericsson.sm.CarApp.model.enumeration.CarType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class Car {
     @Column(name = "car_id")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;

@@ -1,5 +1,6 @@
 package com.ericsson.sm.CarApp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,6 +42,7 @@ public class Client {
     @Column(name = "country")
     private String country;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "client")
     private List<Car> cars;
 }
