@@ -12,4 +12,5 @@ public interface CarService {
     List<CarResponseDto> getAll();
     CarResponseDto findById(Long id);
     ResponseEntity<String> deleteById(Long clientId, Long carId);
+    CarResponseDto updateById(Long clientId, Long carId, CarRequestDto carRequestDto);
 }

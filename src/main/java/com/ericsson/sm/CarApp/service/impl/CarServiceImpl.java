@@ -62,4 +62,16 @@ public class CarServiceImpl implements CarService {
         carRepository.deleteById(carId);
         return new ResponseEntity<>("Car deleted", HttpStatus.OK);
     }
+
+    @Override
+    public CarResponseDto updateById(Long clientId, Long carId, CarRequestDto carRequestDto) {
+        Client client = clientRepository.findById(clientId).orElse(null);
+        Car carToRemove = carRepository.findById(carId).orElse(null);
+        client.getCars().remove(carToRemove);
+
+        Car car = carDtoMapper.toEntity(carId, carRequestDto);
+        Car savedCar = carRepository.save(car);
+        client.getCars().add(savedCar);
+        return carDtoMapper.toDto(savedCar);
+    }
 }

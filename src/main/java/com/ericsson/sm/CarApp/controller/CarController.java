@@ -25,6 +25,11 @@ public class CarController {
         return carService.deleteById(clientId, carId);
     }
 
+    @PutMapping("/api/customers/{clientId}/cars/{carId}")
+    public CarResponseDto updateById(@PathVariable Long clientId, @PathVariable Long carId, @RequestBody CarRequestDto carRequestDto){
+        return carService.updateById(clientId, carId, carRequestDto);
+    }
+
     @GetMapping("/api/cars")
     public List<CarResponseDto> getAll(){
         return carService.getAll();

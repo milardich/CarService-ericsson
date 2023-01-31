@@ -3,7 +3,6 @@ package com.ericsson.sm.CarApp.service.mapper;
 import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.dto.CarResponseDto;
 import com.ericsson.sm.CarApp.model.Car;
-import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.CarRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CarDtoMapper {
-    private final ClientRepository clientRepository;
     private final CarRepository carRepository;
 
     public CarResponseDto toDto(Car car){
@@ -32,7 +30,6 @@ public class CarDtoMapper {
 
         car.setCarType(dto.getCarType());
         car.setColor(dto.getColor());
-
         car.setManufactureYear(dto.getManufactureYear());
         car.setRegistrationMark(dto.getRegistrationMark());
 
@@ -44,7 +41,6 @@ public class CarDtoMapper {
 
         car.setCarType(dto.getCarType());
         car.setColor(dto.getColor());
-
         car.setManufactureYear(dto.getManufactureYear());
         car.setRegistrationMark(dto.getRegistrationMark());
 
