@@ -3,8 +3,8 @@ package com.ericsson.sm.CarApp.service.mapper;
 import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.dto.CarResponseDto;
 import com.ericsson.sm.CarApp.model.Car;
+import com.ericsson.sm.CarApp.model.enumeration.CarType;
 import com.ericsson.sm.CarApp.repository.CarRepository;
-import com.ericsson.sm.CarApp.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,9 @@ public class CarDtoMapper {
     public Car toEntity(CarRequestDto dto){
         Car car = new Car();
 
-        car.setCarType(dto.getCarType());
+        CarType carType = CarType.valueOf(dto.getCarType());
+        car.setCarType(carType);
+
         car.setColor(dto.getColor());
         car.setManufactureYear(dto.getManufactureYear());
         car.setRegistrationMark(dto.getRegistrationMark());
@@ -39,7 +41,9 @@ public class CarDtoMapper {
     public Car toEntity(Long id, CarRequestDto dto){
         Car car = carRepository.findById(id).orElse(null);
 
-        car.setCarType(dto.getCarType());
+        CarType carType = CarType.valueOf(dto.getCarType());
+        car.setCarType(carType);
+
         car.setColor(dto.getColor());
         car.setManufactureYear(dto.getManufactureYear());
         car.setRegistrationMark(dto.getRegistrationMark());

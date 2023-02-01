@@ -16,6 +16,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = GenericValidationException.class)
+    public ResponseEntity<ErrorDetails> handleGenericValidationException(GenericValidationException genericValidationException){
+        ErrorDetails errorDetails = prepareErrorDetails(genericValidationException);
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     public ErrorDetails prepareErrorDetails(Exception exception){
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setTimeStamp(new Date());
