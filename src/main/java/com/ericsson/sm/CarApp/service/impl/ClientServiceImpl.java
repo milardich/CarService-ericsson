@@ -2,6 +2,7 @@ package com.ericsson.sm.CarApp.service.impl;
 
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
+import com.ericsson.sm.CarApp.exception.EntityNotFoundException;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
@@ -36,7 +37,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto findById(Long id) {
-        Client client = clientRepository.findById(id).orElse(null);
+        Client client = clientRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Entity not found")
+        );
         ClientResponseDto clientResponseDto = new ClientResponseDto();
         if(client != null){
             clientResponseDto = clientDtoMapper.toDto(client);
