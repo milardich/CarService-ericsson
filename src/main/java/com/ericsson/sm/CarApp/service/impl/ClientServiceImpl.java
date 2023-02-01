@@ -2,7 +2,6 @@ package com.ericsson.sm.CarApp.service.impl;
 
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
-import com.ericsson.sm.CarApp.exception.EntityNotFoundException;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponseDto findById(Long id) {
         Client client = clientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Entity not found")
+                () -> new EntityNotFoundException("Entity with id " + id + " not found")
         );
         ClientResponseDto clientResponseDto = new ClientResponseDto();
         if(client != null){

@@ -5,12 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityNotFoundException;
+import java.util.Date;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException entityNotFoundException){
-        return new ResponseEntity<>(LocalDateTime.now() + " - " + entityNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorDetails> handleEntityNotFoundException(EntityNotFoundException entityNotFoundException){
+        ErrorDetails errorDetails = prepareErrorDetails(entityNotFoundException);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    public ErrorDetails prepareErrorDetails(Exception exception){
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setTimeStamp(new Date());
+        errorDetails.setMessage(exception.getMessage());
+        return errorDetails;
     }
 }
