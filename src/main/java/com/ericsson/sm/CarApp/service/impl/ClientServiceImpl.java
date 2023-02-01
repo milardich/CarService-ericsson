@@ -6,6 +6,7 @@ import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
+import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponseDto save(ClientRequestDto clientRequestDto) {
         Client client = clientDtoMapper.toEntity(clientRequestDto);
+        ClientValidation clientValidation = new ClientValidation();
+        clientValidation.validate(client);
         Client savedClient = clientRepository.save(client);
         return clientDtoMapper.toDto(savedClient);
     }
@@ -41,26 +44,23 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Client with id " + id + " not found")
         );
-        ClientResponseDto clientResponseDto = new ClientResponseDto();
-        if(client != null){
-            clientResponseDto = clientDtoMapper.toDto(client);
-        }
-        return clientResponseDto;
+        return clientDtoMapper.toDto(client);
     }
 
     @Override
     public ResponseEntity<String> deleteById(Long id) {
-        Client client = clientRepository.findById(id).orElseThrow(
+        clientRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Client with id " + id + " not found")
         );
-        if(client != null){
-            clientRepository.deleteById(id);
-        }
-        return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        clientRepository.deleteById(id);
+        return new ResponseEntity<>("Client deleted", HttpStatus.OK);
     }
 
     @Override
     public ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto) {
+        clientRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Client with id  " + id + " not found")
+        );
         Client client = clientDtoMapper.toEntity(id, clientRequestDto);
         ClientResponseDto clientResponseDto;
         Client savedClient = clientRepository.save(client);
