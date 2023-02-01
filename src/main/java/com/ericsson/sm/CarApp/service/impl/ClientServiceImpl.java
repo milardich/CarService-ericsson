@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -36,7 +38,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto findById(Long id) {
-        Client client = clientRepository.findById(id).orElse(null);
+        Client client = clientRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Client with id " + id + " not found")
+        );
         ClientResponseDto clientResponseDto = new ClientResponseDto();
         if(client != null){
             clientResponseDto = clientDtoMapper.toDto(client);
@@ -46,11 +50,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<String> deleteById(Long id) {
-        Client client = clientRepository.findById(id).orElse(null);
-        if(client == null){
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        Client client = clientRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Client with id " + id + " not found")
+        );
+        if(client != null){
+            clientRepository.deleteById(id);
         }
-        clientRepository.deleteById(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
