@@ -39,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponseDto findById(Long id) {
         Client client = clientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Entity with id " + id + " not found")
+                () -> new EntityNotFoundException("Client with id " + id + " not found")
         );
         ClientResponseDto clientResponseDto = new ClientResponseDto();
         if(client != null){
@@ -50,11 +50,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<String> deleteById(Long id) {
-        Client client = clientRepository.findById(id).orElse(null);
-        if(client == null){
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        Client client = clientRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Client with id " + id + " not found")
+        );
+        if(client != null){
+            clientRepository.deleteById(id);
         }
-        clientRepository.deleteById(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
