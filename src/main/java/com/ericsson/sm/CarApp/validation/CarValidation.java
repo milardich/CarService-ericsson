@@ -2,7 +2,9 @@ package com.ericsson.sm.CarApp.validation;
 
 import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.exception.GenericValidationException;
+import com.ericsson.sm.CarApp.model.enumeration.CarType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class CarValidation {
@@ -11,6 +13,13 @@ public class CarValidation {
         if(carRequestDto.getCarType() == null){
             throw new GenericValidationException("Car type is null");
         }
+        if(!StringUtils.hasLength(carRequestDto.getCarType())){
+            throw new GenericValidationException("Car type is empty");
+        }
+        if(!carTypeExists(carRequestDto.getCarType())) {
+            throw new GenericValidationException("Car type does not exist");
+        }
+
         if(carRequestDto.getManufactureYear() == null){
             throw new GenericValidationException("Manufacture year is null");
         }
@@ -20,12 +29,16 @@ public class CarValidation {
 
         checkRegistrationMarkFormat(carRequestDto.getRegistrationMark());
 
-        if(carRequestDto.getColor().isBlank()){
+        if(!StringUtils.hasLength(carRequestDto.getColor())){
             throw new GenericValidationException("Color is blank");
         }
     }
 
     private void checkRegistrationMarkFormat(String registrationMark){
+
+        if(registrationMark.length() < 9 || registrationMark.length() > 11){
+            throw new GenericValidationException("Registration mark character count is out of bounds");
+        }
         if(!Character.isLetter(registrationMark.charAt(0)) || !Character.isLetter(registrationMark.charAt(1))){
             throw new GenericValidationException("First two characters in registration mark are not letters");
         }
@@ -51,5 +64,14 @@ public class CarValidation {
                 throw new GenericValidationException("Non digit found in numbers section");
             }
         }
+    }
+
+    private boolean carTypeExists(String carType){
+        for (CarType c : CarType.values()) {
+            if (c.name().equals(carType)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
