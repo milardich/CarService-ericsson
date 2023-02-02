@@ -2,10 +2,12 @@ package com.ericsson.sm.CarApp.model;
 
 import com.ericsson.sm.CarApp.model.enumeration.CarType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "cars")
@@ -35,4 +37,8 @@ public class Car {
 
     @Column(name = "color")
     private String color;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "car")
+    private List<CarService> carServices;
 }
