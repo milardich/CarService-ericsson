@@ -41,8 +41,6 @@ public class CarServiceServiceImpl implements CarServiceService {
 
         CarService carService = carServiceDtoMapper.toEntity(carId, carServiceRequestDto);
 
-        car.getCarServices().add(carService);
-
         carServiceRepository.save(carService);
 
         return clientDtoMapper.toDto(client);

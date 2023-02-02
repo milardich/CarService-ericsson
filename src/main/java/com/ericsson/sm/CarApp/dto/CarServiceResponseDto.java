@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class CarServiceRequestDto {
+public class CarServiceResponseDto {
     private LocalDateTime dateOfService;
     private String workerFirstName;
     private String workerLastName;

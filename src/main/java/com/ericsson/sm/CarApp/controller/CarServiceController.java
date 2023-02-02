@@ -2,7 +2,6 @@ package com.ericsson.sm.CarApp.controller;
 
 import com.ericsson.sm.CarApp.dto.CarServiceRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
-import com.ericsson.sm.CarApp.repository.CarServiceRepository;
 import com.ericsson.sm.CarApp.service.CarServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
