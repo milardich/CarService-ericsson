@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +34,10 @@ public class CarServiceServiceImpl implements CarServiceService {
         Car car = carRepository.findById(carId).orElseThrow(
                 () -> new EntityNotFoundException("Car with id " + carId + " not found")
         );
+
+        if(!client.getCars().contains(car)){
+            throw new EntityNotFoundException("Client with id " + clientId + " does not own that car");
+        }
 
         CarService carService = carServiceDtoMapper.toEntity(carId, carServiceRequestDto);
 
