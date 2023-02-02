@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "car_services")
@@ -24,7 +24,7 @@ public class CarService {
     @JoinColumn(name = "car_id")
     private Car car;
     
-    private Date dateOfService;
+    private LocalDateTime dateOfService;
     private String workerFirstName;
     private String workerLastName;
     private String workDescription;
