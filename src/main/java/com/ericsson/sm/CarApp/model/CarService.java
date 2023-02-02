@@ -26,7 +26,6 @@ public class CarService {
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime dateOfService;
     private String workerFirstName;
     private String workerLastName;
