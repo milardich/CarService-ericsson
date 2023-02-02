@@ -6,9 +6,9 @@ import com.ericsson.sm.CarApp.model.CarService;
 import com.ericsson.sm.CarApp.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+
 
 @Service
 @RequiredArgsConstructor
