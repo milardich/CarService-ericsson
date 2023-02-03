@@ -52,7 +52,6 @@ public class ClientDtoMapper {
         client.setZipCode(dto.getZipCode());
         client.setCountry(dto.getCountry());
         client.setNumber(dto.getNumber());
-        client.setCars(dto.getCars());
 
         return client;
     }
@@ -68,7 +67,6 @@ public class ClientDtoMapper {
         client.setZipCode(dto.getZipCode());
         client.setCountry(dto.getCountry());
         client.setNumber(dto.getNumber());
-        client.setCars(dto.getCars());
 
         return client;
     }
