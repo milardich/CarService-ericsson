@@ -68,30 +68,29 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public ResponseEntity<String> deleteById(Long clientId, Long carId) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
+        clientRepository.findById(clientId).orElseThrow(
                 () -> new EntityNotFoundException("Client with id " + clientId + " not found")
         );
-        Car car = carRepository.findById(carId).orElseThrow(
+        carRepository.findById(carId).orElseThrow(
                 () -> new EntityNotFoundException("Car with id " + carId + " not found")
         );
-        client.getCars().remove(car);
+
         carRepository.deleteById(carId);
         return new ResponseEntity<>("Car deleted", HttpStatus.OK);
     }
 
     @Override
     public CarResponseDto updateById(Long clientId, Long carId, CarRequestDto carRequestDto) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
+        clientRepository.findById(clientId).orElseThrow(
                 () -> new EntityNotFoundException("Client with id " + clientId + " not found")
         );
-        Car carToRemove = carRepository.findById(carId).orElseThrow(
+        carRepository.findById(carId).orElseThrow(
                 () -> new EntityNotFoundException("Car with id " + carId + " not found")
         );
-        client.getCars().remove(carToRemove);
 
         Car car = carDtoMapper.toEntity(carId, carRequestDto);
         Car savedCar = carRepository.save(car);
-        client.getCars().add(savedCar);
+
         return carDtoMapper.toDto(savedCar);
     }
 }
