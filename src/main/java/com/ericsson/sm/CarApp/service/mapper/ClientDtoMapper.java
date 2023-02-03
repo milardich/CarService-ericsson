@@ -1,17 +1,23 @@
 package com.ericsson.sm.CarApp.service.mapper;
 
+import com.ericsson.sm.CarApp.dto.CarResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
+import com.ericsson.sm.CarApp.model.Car;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ClientDtoMapper {
 
     private final ClientRepository clientRepository;
+    private final CarDtoMapper carDtoMapper;
 
     public ClientResponseDto toDto(Client client){
         ClientResponseDto dto = new ClientResponseDto();
@@ -24,7 +30,13 @@ public class ClientDtoMapper {
         dto.setNumber(client.getNumber());
         dto.setZipCode(client.getZipCode());
         dto.setCountry(client.getCountry());
-        dto.setCars(client.getCars());
+
+        List<CarResponseDto> cars = new ArrayList<>();
+        for(Car car : client.getCars()){
+            CarResponseDto carResponseDto = carDtoMapper.toDto(car);
+            cars.add(carResponseDto);
+        }
+        dto.setCars(cars);
 
         return dto;
     }
@@ -40,7 +52,6 @@ public class ClientDtoMapper {
         client.setZipCode(dto.getZipCode());
         client.setCountry(dto.getCountry());
         client.setNumber(dto.getNumber());
-        client.setCars(dto.getCars());
 
         return client;
     }
@@ -56,7 +67,6 @@ public class ClientDtoMapper {
         client.setZipCode(dto.getZipCode());
         client.setCountry(dto.getCountry());
         client.setNumber(dto.getNumber());
-        client.setCars(dto.getCars());
 
         return client;
     }
