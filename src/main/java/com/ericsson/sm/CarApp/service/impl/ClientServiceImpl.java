@@ -2,6 +2,7 @@ package com.ericsson.sm.CarApp.service.impl;
 
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
+import com.ericsson.sm.CarApp.model.Car;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientDtoMapper.toEntity(clientRequestDto);
         ClientValidation clientValidation = new ClientValidation();
         clientValidation.validate(client);
+        client.setCars(new ArrayList<Car>());
         Client savedClient = clientRepository.save(client);
         return clientDtoMapper.toDto(savedClient);
     }
