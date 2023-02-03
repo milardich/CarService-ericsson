@@ -1,6 +1,7 @@
 package com.ericsson.sm.CarApp.controller;
 
 import com.ericsson.sm.CarApp.dto.CarServiceRequestDto;
+import com.ericsson.sm.CarApp.dto.CarServiceResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.service.CarServiceService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,15 @@ public class CarServiceController {
                                              @PathVariable Long carServiceId
     ) {
         return carServiceService.deleteById(clientId, carId, carServiceId);
+    }
+
+
+    @PutMapping("/api/customers/{clientId}/cars/{carId}/car-services/{carServiceId}")
+    public CarServiceResponseDto updateById(@PathVariable Long clientId,
+                                            @PathVariable Long carId,
+                                            @PathVariable Long carServiceId,
+                                            @RequestBody CarServiceRequestDto carServiceRequestDto
+    ){
+        return carServiceService.updateById(clientId, carId, carServiceId, carServiceRequestDto);
     }
 }
