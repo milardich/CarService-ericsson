@@ -37,6 +37,10 @@ public class CarServiceImpl implements CarService {
         CarValidation carValidation = new CarValidation();
         carValidation.validate(carRequestDto);
         Car car = carDtoMapper.toEntity(carRequestDto);
+
+        List<com.ericsson.sm.CarApp.model.CarService> carServices = new ArrayList<>();
+        car.setCarServices(carServices);
+
         car.setClient(client);
         carRepository.save(car);
 
