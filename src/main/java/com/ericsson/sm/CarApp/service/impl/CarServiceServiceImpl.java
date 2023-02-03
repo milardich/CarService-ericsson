@@ -12,6 +12,8 @@ import com.ericsson.sm.CarApp.service.CarServiceService;
 import com.ericsson.sm.CarApp.service.mapper.CarServiceDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -44,5 +46,32 @@ public class CarServiceServiceImpl implements CarServiceService {
         carServiceRepository.save(carService);
 
         return clientDtoMapper.toDto(client);
+    }
+
+
+    @Override
+    public ResponseEntity<String> deleteById(Long clientId, Long carId, Long carServiceId) {
+        Client client = clientRepository.findById(clientId).orElseThrow(
+                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
+        );
+
+        Car car = carRepository.findById(carId).orElseThrow(
+                () -> new EntityNotFoundException("Car with id " + carId + " not found")
+        );
+
+        CarService carService = carServiceRepository.findById(carServiceId).orElseThrow(
+                () -> new EntityNotFoundException("CarService with id " + carServiceId + " not found")
+        );
+
+        if(!client.getCars().contains(car)){
+            throw new EntityNotFoundException("Client does not own that car");
+        }
+
+        if(!car.getCarServices().contains(carService)){
+            throw new EntityNotFoundException("Car does not have that carService");
+        }
+
+        carServiceRepository.deleteById(carServiceId);
+        return new ResponseEntity<>("Car service deleted", HttpStatus.OK);
     }
 }
