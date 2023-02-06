@@ -100,8 +100,8 @@ public class CarServiceServiceImpl implements CarServiceService {
     }
 
     @Override
-    public ResponseEntity<String> updateIsPaid(Long clientId, Long carId, Long carServiceId, CarServiceIsPaidRequestDto carServiceIsPaidRequestDto) {
-
+    public CarServiceIsPaidResponseDto updateIsPaid(Long clientId, Long carId, Long carServiceId, CarServiceIsPaidRequestDto carServiceIsPaidRequestDto) {
+        CarServiceIsPaidResponseDto response = new CarServiceIsPaidResponseDto();
         clientValidation.existsById(clientId);
         carValidation.existsById(carId);
         carServiceValidation.existsById(carServiceId);
@@ -120,6 +120,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         carService.setPaid(carServiceIsPaidRequestDto.isPaid());
         carServiceRepository.save(carService);
 
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        response.setMessage("Success");
+        return response;
     }
 }

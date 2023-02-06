@@ -42,7 +42,7 @@ public class CarServiceController {
 
 
     @PutMapping("/api/customers/{clientId}/cars/{carId}/car-services/{carServiceId}/is-paid")
-    public ResponseEntity<String> updateIsPaid(@PathVariable Long clientId,
+    public CarServiceIsPaidResponseDto updateIsPaid(@PathVariable Long clientId,
                                                @PathVariable Long carId,
                                                @PathVariable Long carServiceId,
                                                @RequestBody CarServiceIsPaidRequestDto carServiceIsPaidRequestDto

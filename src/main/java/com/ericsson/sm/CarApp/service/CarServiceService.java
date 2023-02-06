@@ -7,5 +7,5 @@ public interface CarServiceService {
     ClientResponseDto save(Long clientId, Long carId, CarServiceRequestDto carServiceRequestDto);
     ResponseEntity<String> deleteById(Long clientId, Long carId, Long carServiceId);
     CarServiceResponseDto updateById(Long clientId, Long carId, Long carServiceId, CarServiceRequestDto carServiceRequestDto);
-    ResponseEntity<String> updateIsPaid(Long clientId, Long carId, Long carServiceId, CarServiceIsPaidRequestDto carServiceIsPaidRequestDto);
+    CarServiceIsPaidResponseDto updateIsPaid(Long clientId, Long carId, Long carServiceId, CarServiceIsPaidRequestDto carServiceIsPaidRequestDto);
 }
