@@ -12,6 +12,9 @@ import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarServiceService;
 import com.ericsson.sm.CarApp.service.mapper.CarServiceDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
+import com.ericsson.sm.CarApp.validation.CarServiceValidation;
+import com.ericsson.sm.CarApp.validation.CarValidation;
+import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +29,14 @@ public class CarServiceServiceImpl implements CarServiceService {
     private final CarRepository carRepository;
     private final ClientDtoMapper clientDtoMapper;
     private final CarServiceDtoMapper carServiceDtoMapper;
+    private final CarValidation carValidation;
+    private final ClientValidation clientValidation;
+    private final CarServiceValidation carServiceValidation;
 
     @Override
     public ClientResponseDto save(Long clientId, Long carId, CarServiceRequestDto carServiceRequestDto) {
-        if(!clientRepository.existsById(clientId)){
-            throw new EntityNotFoundException("Client with id " + clientId + " not found");
-        }
-        if(!carRepository.existsById(carId)){
-            throw new EntityNotFoundException("Car with id " + carId + " not found");
-        }
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
 
         Client client = clientRepository.getReferenceById(clientId);
         Car car = carRepository.getReferenceById(carId);
@@ -53,15 +55,9 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Override
     public ResponseEntity<String> deleteById(Long clientId, Long carId, Long carServiceId) {
-        if(!clientRepository.existsById(clientId)){
-            throw new EntityNotFoundException("Client with id " + clientId + " not found");
-        }
-        if(!carRepository.existsById(carId)){
-            throw new EntityNotFoundException("Car with id " + carId + " not found");
-        }
-        if(!carServiceRepository.existsById(carServiceId)){
-            throw new EntityNotFoundException("CarService with id " + carServiceId + " not found");
-        }
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
+        carServiceValidation.existsById(carServiceId);
 
         Client client = clientRepository.getReferenceById(clientId);
         Car car = carRepository.getReferenceById(carId);
@@ -83,15 +79,9 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Override
     public CarServiceResponseDto updateById(Long clientId, Long carId, Long carServiceId, CarServiceRequestDto carServiceRequestDto) {
-        if(!clientRepository.existsById(clientId)){
-            throw new EntityNotFoundException("Client with id " + clientId + " not found");
-        }
-        if(!carRepository.existsById(carId)){
-            throw new EntityNotFoundException("Car with id " + carId + " not found");
-        }
-        if(!carServiceRepository.existsById(carServiceId)){
-            throw new EntityNotFoundException("CarService with id " + carServiceId + " not found");
-        }
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
+        carServiceValidation.existsById(carServiceId);
 
         Client client = clientRepository.getReferenceById(clientId);
         Car car = carRepository.getReferenceById(carId);
