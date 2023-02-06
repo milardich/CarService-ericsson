@@ -17,4 +17,5 @@ public class ClientResponseDto {
     private String zipCode;
     private String country;
     private List<CarResponseDto> cars;
+    private String email;
 }

@@ -30,6 +30,7 @@ public class ClientDtoMapper {
         dto.setNumber(client.getNumber());
         dto.setZipCode(client.getZipCode());
         dto.setCountry(client.getCountry());
+        dto.setEmail(client.getEmail());
 
         List<CarResponseDto> cars = new ArrayList<>();
         for(Car car : client.getCars()){
@@ -52,6 +53,7 @@ public class ClientDtoMapper {
         client.setZipCode(dto.getZipCode());
         client.setCountry(dto.getCountry());
         client.setNumber(dto.getNumber());
+        client.setEmail(dto.getEmail());
 
         return client;
     }
@@ -67,6 +69,7 @@ public class ClientDtoMapper {
         client.setZipCode(dto.getZipCode());
         client.setCountry(dto.getCountry());
         client.setNumber(dto.getNumber());
+        client.setEmail(dto.getEmail());
 
         return client;
     }

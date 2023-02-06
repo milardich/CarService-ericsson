@@ -31,6 +31,7 @@ public class ClientValidation {
         if(!client.getOib().matches("^\\d+$")){
             throw new GenericValidationException("Oib format is not correct");
         }
+        validateEmail(client.getEmail());
     }
 
     public void existsById(Long id){
@@ -50,6 +51,12 @@ public class ClientValidation {
             if(!car.getCarServices().contains(carService)){
                 throw new EntityNotFoundException("Car does not have that Car Service");
             }
+        }
+    }
+
+    public void validateEmail(String email){
+        if(!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")){
+            throw new GenericValidationException("Email format is not valid");
         }
     }
 }
