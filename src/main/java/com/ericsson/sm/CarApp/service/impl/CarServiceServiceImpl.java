@@ -1,8 +1,6 @@
 package com.ericsson.sm.CarApp.service.impl;
 
-import com.ericsson.sm.CarApp.dto.CarServiceRequestDto;
-import com.ericsson.sm.CarApp.dto.CarServiceResponseDto;
-import com.ericsson.sm.CarApp.dto.ClientResponseDto;
+import com.ericsson.sm.CarApp.dto.*;
 import com.ericsson.sm.CarApp.model.Car;
 import com.ericsson.sm.CarApp.model.CarService;
 import com.ericsson.sm.CarApp.model.Client;
@@ -63,13 +61,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         Car car = carRepository.getReferenceById(carId);
         CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
-        if(!client.getCars().contains(car)){
-            throw new EntityNotFoundException("Client does not own that car");
-        }
-
-        if(!car.getCarServices().contains(carService)){
-            throw new EntityNotFoundException("Car does not have that carService");
-        }
+        clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
 
         carServiceRepository.deleteById(carServiceId);
 
@@ -87,17 +79,32 @@ public class CarServiceServiceImpl implements CarServiceService {
         Car car = carRepository.getReferenceById(carId);
         CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
-        if(!client.getCars().contains(car)){
-            throw new EntityNotFoundException("Client does not own that car");
-        }
-
-        if(!car.getCarServices().contains(carService)){
-            throw new EntityNotFoundException("Car does not have that carService");
-        }
+        clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
 
         CarService updatedCarService = carServiceDtoMapper.toEntity(carId, carServiceId, carServiceRequestDto);
         CarService savedCarService = carServiceRepository.save(updatedCarService);
 
         return carServiceDtoMapper.toDto(savedCarService);
+    }
+
+    @Override
+    public CarServiceIsPaidResponseDto updateIsPaid(Long clientId, Long carId, Long carServiceId, CarServiceIsPaidRequestDto carServiceIsPaidRequestDto) {
+        CarServiceIsPaidResponseDto response = new CarServiceIsPaidResponseDto();
+
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
+        carServiceValidation.existsById(carServiceId);
+
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
+        CarService carService = carServiceRepository.getReferenceById(carServiceId);
+
+        clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
+
+        carService.setPaid(carServiceIsPaidRequestDto.isPaid());
+        carServiceRepository.save(carService);
+
+        response.setMessage("Success");
+        return response;
     }
 }

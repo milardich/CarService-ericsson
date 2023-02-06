@@ -1,6 +1,8 @@
 package com.ericsson.sm.CarApp.validation;
 
 import com.ericsson.sm.CarApp.exception.GenericValidationException;
+import com.ericsson.sm.CarApp.model.Car;
+import com.ericsson.sm.CarApp.model.CarService;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,20 @@ public class ClientValidation {
     public void existsById(Long id){
         if(!clientRepository.existsById(id)){
             throw new EntityNotFoundException("Car with id " + id + " does not exist");
+        }
+    }
+
+    public void checkIfClientOwnsCarAndCarHasCarService(Client client, Car car, CarService carService){
+        if(client != null){
+            if(!client.getCars().contains(car)){
+                throw new EntityNotFoundException("Client does not own that car");
+            }
+        }
+
+        if(car != null){
+            if(!car.getCarServices().contains(carService)){
+                throw new EntityNotFoundException("Car does not have that Car Service");
+            }
         }
     }
 }
