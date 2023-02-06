@@ -61,7 +61,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         Car car = carRepository.getReferenceById(carId);
         CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
-        clientValidation.checkClientHasCar_CarHasService(client, car, carService);
+        clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
 
         carServiceRepository.deleteById(carServiceId);
 
@@ -79,7 +79,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         Car car = carRepository.getReferenceById(carId);
         CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
-        clientValidation.checkClientHasCar_CarHasService(client, car, carService);
+        clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
 
         CarService updatedCarService = carServiceDtoMapper.toEntity(carId, carServiceId, carServiceRequestDto);
         CarService savedCarService = carServiceRepository.save(updatedCarService);
@@ -90,7 +90,7 @@ public class CarServiceServiceImpl implements CarServiceService {
     @Override
     public CarServiceIsPaidResponseDto updateIsPaid(Long clientId, Long carId, Long carServiceId, CarServiceIsPaidRequestDto carServiceIsPaidRequestDto) {
         CarServiceIsPaidResponseDto response = new CarServiceIsPaidResponseDto();
-        
+
         clientValidation.existsById(clientId);
         carValidation.existsById(carId);
         carServiceValidation.existsById(carServiceId);
@@ -99,7 +99,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         Car car = carRepository.getReferenceById(carId);
         CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
-        clientValidation.checkClientHasCar_CarHasService(client, car, carService);
+        clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
 
         carService.setPaid(carServiceIsPaidRequestDto.isPaid());
         carServiceRepository.save(carService);

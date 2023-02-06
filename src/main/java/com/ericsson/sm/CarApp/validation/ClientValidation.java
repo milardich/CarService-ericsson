@@ -39,7 +39,7 @@ public class ClientValidation {
         }
     }
 
-    public void checkClientHasCar_CarHasService(Client client, Car car, CarService carService){
+    public void checkIfClientOwnsCarAndCarHasCarService(Client client, Car car, CarService carService){
         if(client != null){
             if(!client.getCars().contains(car)){
                 throw new EntityNotFoundException("Client does not own that car");
