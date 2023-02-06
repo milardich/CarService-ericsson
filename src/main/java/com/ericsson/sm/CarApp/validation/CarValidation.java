@@ -3,11 +3,19 @@ package com.ericsson.sm.CarApp.validation;
 import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.exception.GenericValidationException;
 import com.ericsson.sm.CarApp.model.enumeration.CarType;
+import com.ericsson.sm.CarApp.repository.CarRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityNotFoundException;
+
 @Component
+@RequiredArgsConstructor
 public class CarValidation {
+
+    private final CarRepository carRepository;
+
     public void validate(CarRequestDto carRequestDto){
 
         if(carRequestDto.getCarType() == null){
@@ -63,6 +71,12 @@ public class CarValidation {
             if(!Character.isDigit(registrationMark.charAt(i))){
                 throw new GenericValidationException("Non digit found in numbers section");
             }
+        }
+    }
+
+    public void existsById(Long id){
+        if(!carRepository.existsById(id)){
+            throw new EntityNotFoundException("Car with id " + id + " does not exist");
         }
     }
 

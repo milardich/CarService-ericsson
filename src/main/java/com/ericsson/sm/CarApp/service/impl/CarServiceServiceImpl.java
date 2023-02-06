@@ -1,6 +1,7 @@
 package com.ericsson.sm.CarApp.service.impl;
 
 import com.ericsson.sm.CarApp.dto.CarServiceRequestDto;
+import com.ericsson.sm.CarApp.dto.CarServiceResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.model.Car;
 import com.ericsson.sm.CarApp.model.CarService;
@@ -11,11 +12,13 @@ import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarServiceService;
 import com.ericsson.sm.CarApp.service.mapper.CarServiceDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
+import com.ericsson.sm.CarApp.validation.CarServiceValidation;
+import com.ericsson.sm.CarApp.validation.CarValidation;
+import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityNotFoundException;
 
 @Service
@@ -26,16 +29,17 @@ public class CarServiceServiceImpl implements CarServiceService {
     private final CarRepository carRepository;
     private final ClientDtoMapper clientDtoMapper;
     private final CarServiceDtoMapper carServiceDtoMapper;
+    private final CarValidation carValidation;
+    private final ClientValidation clientValidation;
+    private final CarServiceValidation carServiceValidation;
 
     @Override
     public ClientResponseDto save(Long clientId, Long carId, CarServiceRequestDto carServiceRequestDto) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
 
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
 
         if(!client.getCars().contains(car)){
             throw new EntityNotFoundException("Client with id " + clientId + " does not own that car");
@@ -51,17 +55,13 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Override
     public ResponseEntity<String> deleteById(Long clientId, Long carId, Long carServiceId) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
+        carServiceValidation.existsById(carServiceId);
 
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
-
-        CarService carService = carServiceRepository.findById(carServiceId).orElseThrow(
-                () -> new EntityNotFoundException("CarService with id " + carServiceId + " not found")
-        );
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
+        CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
         if(!client.getCars().contains(car)){
             throw new EntityNotFoundException("Client does not own that car");
@@ -72,6 +72,32 @@ public class CarServiceServiceImpl implements CarServiceService {
         }
 
         carServiceRepository.deleteById(carServiceId);
+
         return new ResponseEntity<>("Car service deleted", HttpStatus.OK);
+    }
+
+
+    @Override
+    public CarServiceResponseDto updateById(Long clientId, Long carId, Long carServiceId, CarServiceRequestDto carServiceRequestDto) {
+        clientValidation.existsById(clientId);
+        carValidation.existsById(carId);
+        carServiceValidation.existsById(carServiceId);
+
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
+        CarService carService = carServiceRepository.getReferenceById(carServiceId);
+
+        if(!client.getCars().contains(car)){
+            throw new EntityNotFoundException("Client does not own that car");
+        }
+
+        if(!car.getCarServices().contains(carService)){
+            throw new EntityNotFoundException("Car does not have that carService");
+        }
+
+        CarService updatedCarService = carServiceDtoMapper.toEntity(carId, carServiceId, carServiceRequestDto);
+        CarService savedCarService = carServiceRepository.save(updatedCarService);
+
+        return carServiceDtoMapper.toDto(savedCarService);
     }
 }
