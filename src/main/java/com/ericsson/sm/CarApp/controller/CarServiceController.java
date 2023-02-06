@@ -1,8 +1,6 @@
 package com.ericsson.sm.CarApp.controller;
 
-import com.ericsson.sm.CarApp.dto.CarServiceRequestDto;
-import com.ericsson.sm.CarApp.dto.CarServiceResponseDto;
-import com.ericsson.sm.CarApp.dto.ClientResponseDto;
+import com.ericsson.sm.CarApp.dto.*;
 import com.ericsson.sm.CarApp.service.CarServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +38,15 @@ public class CarServiceController {
                                             @RequestBody CarServiceRequestDto carServiceRequestDto
     ){
         return carServiceService.updateById(clientId, carId, carServiceId, carServiceRequestDto);
+    }
+
+
+    @PutMapping("/api/customers/{clientId}/cars/{carId}/car-services/{carServiceId}/is-paid")
+    public ResponseEntity<String> updateIsPaid(@PathVariable Long clientId,
+                                               @PathVariable Long carId,
+                                               @PathVariable Long carServiceId,
+                                               @RequestBody CarServiceIsPaidRequestDto carServiceIsPaidRequestDto
+    ){
+        return carServiceService.updateIsPaid(clientId, carId, carServiceId, carServiceIsPaidRequestDto);
     }
 }
