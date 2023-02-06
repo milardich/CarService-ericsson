@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,26 +45,27 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto findById(Long id) {
-        Client client = clientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + id + " not found")
-        );
+        if(!clientRepository.existsById(id)){
+            throw new EntityNotFoundException("Client with id " + id + " not found");
+        }
+        Client client = clientRepository.getReferenceById(id);
         return clientDtoMapper.toDto(client);
     }
 
     @Override
     public ResponseEntity<String> deleteById(Long id) {
-        clientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + id + " not found")
-        );
+        if(!clientRepository.existsById(id)){
+            throw new EntityNotFoundException("Client with id " + id + " not found");
+        }
         clientRepository.deleteById(id);
         return new ResponseEntity<>("Client deleted", HttpStatus.OK);
     }
 
     @Override
     public ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto) {
-        clientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Client with id  " + id + " not found")
-        );
+        if(!clientRepository.existsById(id)){
+            throw new EntityNotFoundException("Client with id  " + id + " not found");
+        }
         Client client = clientDtoMapper.toEntity(id, clientRequestDto);
         ClientResponseDto clientResponseDto;
         Client savedClient = clientRepository.save(client);

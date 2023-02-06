@@ -31,9 +31,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public ClientResponseDto save(Long id, CarRequestDto carRequestDto) {
-        Client client = clientRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + id + " not found")
-        );
+        if(!clientRepository.existsById(id)){
+            throw new EntityNotFoundException("Client with id " + id + " not found");
+        }
+        Client client = clientRepository.getReferenceById(id);
         CarValidation carValidation = new CarValidation();
         carValidation.validate(carRequestDto);
         Car car = carDtoMapper.toEntity(carRequestDto);
@@ -60,33 +61,35 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponseDto findById(Long id) {
-        Car car = carRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + id + " not found")
-        );
+        if(!carRepository.existsById(id)){
+            throw new EntityNotFoundException("Car with id " + id + " not found");
+        }
+        Car car = carRepository.getReferenceById(id);
         return carDtoMapper.toDto(car);
     }
 
     @Override
     public ResponseEntity<String> deleteById(Long clientId, Long carId) {
-        clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
-        carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
+        if(!clientRepository.existsById(clientId)){
+            throw new EntityNotFoundException("Client with id " + clientId + " not found");
+        }
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
 
         carRepository.deleteById(carId);
+
         return new ResponseEntity<>("Car deleted", HttpStatus.OK);
     }
 
     @Override
     public CarResponseDto updateById(Long clientId, Long carId, CarRequestDto carRequestDto) {
-        clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
-        carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
+        if(!clientRepository.existsById(clientId)){
+            throw new EntityNotFoundException("Client with id " + clientId + " not found");
+        }
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
 
         Car car = carDtoMapper.toEntity(carId, carRequestDto);
         Car savedCar = carRepository.save(car);

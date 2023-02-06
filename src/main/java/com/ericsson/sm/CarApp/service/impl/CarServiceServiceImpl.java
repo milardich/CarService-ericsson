@@ -29,13 +29,15 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Override
     public ClientResponseDto save(Long clientId, Long carId, CarServiceRequestDto carServiceRequestDto) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
+        if(!clientRepository.existsById(clientId)){
+            throw new EntityNotFoundException("Client with id " + clientId + " not found");
+        }
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
 
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
 
         if(!client.getCars().contains(car)){
             throw new EntityNotFoundException("Client with id " + clientId + " does not own that car");
@@ -51,17 +53,19 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Override
     public ResponseEntity<String> deleteById(Long clientId, Long carId, Long carServiceId) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
+        if(!clientRepository.existsById(clientId)){
+            throw new EntityNotFoundException("Client with id " + clientId + " not found");
+        }
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
+        if(!carServiceRepository.existsById(carServiceId)){
+            throw new EntityNotFoundException("CarService with id " + carServiceId + " not found");
+        }
 
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
-
-        CarService carService = carServiceRepository.findById(carServiceId).orElseThrow(
-                () -> new EntityNotFoundException("CarService with id " + carServiceId + " not found")
-        );
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
+        CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
         if(!client.getCars().contains(car)){
             throw new EntityNotFoundException("Client does not own that car");
@@ -72,23 +76,26 @@ public class CarServiceServiceImpl implements CarServiceService {
         }
 
         carServiceRepository.deleteById(carServiceId);
+
         return new ResponseEntity<>("Car service deleted", HttpStatus.OK);
     }
 
 
     @Override
     public CarServiceResponseDto updateById(Long clientId, Long carId, Long carServiceId, CarServiceRequestDto carServiceRequestDto) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
-                () -> new EntityNotFoundException("Client with id " + clientId + " not found")
-        );
+        if(!clientRepository.existsById(clientId)){
+            throw new EntityNotFoundException("Client with id " + clientId + " not found");
+        }
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
+        if(!carServiceRepository.existsById(carServiceId)){
+            throw new EntityNotFoundException("CarService with id " + carServiceId + " not found");
+        }
 
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
-
-        CarService carService = carServiceRepository.findById(carServiceId).orElseThrow(
-                () -> new EntityNotFoundException("CarService with id " + carServiceId + " not found")
-        );
+        Client client = clientRepository.getReferenceById(clientId);
+        Car car = carRepository.getReferenceById(carId);
+        CarService carService = carServiceRepository.getReferenceById(carServiceId);
 
         if(!client.getCars().contains(car)){
             throw new EntityNotFoundException("Client does not own that car");
