@@ -18,14 +18,15 @@ public class CarServiceDtoMapper {
     private final CarServiceRepository carServiceRepository;
 
     public CarService toEntity(Long carId, Long carServiceId, CarServiceRequestDto dto){
+        if(!carServiceRepository.existsById(carServiceId)){
+            throw new EntityNotFoundException("CarService with id " + carServiceId + " not found");
+        }
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
 
-        CarService carService = carServiceRepository.findById(carServiceId).orElseThrow(
-                () -> new EntityNotFoundException("CarService with id " + carServiceId + " not found")
-        );
-
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
+        CarService carService = carServiceRepository.getReferenceById(carServiceId);
+        Car car = carRepository.getReferenceById(carId);
 
         carService.setCar(car);
         carService.setDateOfService(dto.getDateOfService());
@@ -41,9 +42,12 @@ public class CarServiceDtoMapper {
 
     public CarService toEntity(Long carId, CarServiceRequestDto dto){
         CarService carService = new CarService();
-        Car car = carRepository.findById(carId).orElseThrow(
-                () -> new EntityNotFoundException("Car with id " + carId + " not found")
-        );
+
+        if(!carRepository.existsById(carId)){
+            throw new EntityNotFoundException("Car with id " + carId + " not found");
+        }
+
+        Car car = carRepository.getReferenceById(carId);
 
         carService.setCar(car);
         carService.setDateOfService(dto.getDateOfService());
