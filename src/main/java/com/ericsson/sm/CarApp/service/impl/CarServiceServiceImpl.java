@@ -56,8 +56,7 @@ public class CarServiceServiceImpl implements CarServiceService {
                 "New Car Service has been added to your car (" + car.getRegistrationMark() + ")" +
                 "\n\n Lp, Your CarService.";
 
-        //emailService.send(client.getEmail(), emailSubject, emailText);
-        emailService.send("Papercut@user.com", emailSubject, emailText);
+        emailService.send(client.getEmail(), emailSubject, emailText);
 
         return clientDtoMapper.toDto(client);
     }
@@ -103,8 +102,7 @@ public class CarServiceServiceImpl implements CarServiceService {
                 "Car Service on your car (" + car.getRegistrationMark() + ") has been updated!" +
                 "\n\n Lp, Your CarService.";
 
-        //emailService.send(client.getEmail(), emailSubject, emailText);
-        emailService.send("Papercut@user.com", emailSubject, emailText);
+        emailService.send(client.getEmail(), emailSubject, emailText);
 
         return carServiceDtoMapper.toDto(savedCarService);
     }
