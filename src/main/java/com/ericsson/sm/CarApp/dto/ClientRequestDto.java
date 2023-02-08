@@ -14,4 +14,5 @@ public class ClientRequestDto {
     private String number;
     private String zipCode;
     private String country;
+    private String email;
 }

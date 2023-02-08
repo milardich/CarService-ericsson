@@ -45,4 +45,7 @@ public class Client {
     @JsonManagedReference
     @OneToMany(mappedBy = "client")
     private List<Car> cars;
+
+    @Column(name = "email")
+    private String email;
 }

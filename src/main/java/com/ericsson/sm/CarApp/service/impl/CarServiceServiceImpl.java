@@ -8,6 +8,7 @@ import com.ericsson.sm.CarApp.repository.CarRepository;
 import com.ericsson.sm.CarApp.repository.CarServiceRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarServiceService;
+import com.ericsson.sm.CarApp.service.EmailService;
 import com.ericsson.sm.CarApp.service.mapper.CarServiceDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
 import com.ericsson.sm.CarApp.validation.CarServiceValidation;
@@ -30,6 +31,7 @@ public class CarServiceServiceImpl implements CarServiceService {
     private final CarValidation carValidation;
     private final ClientValidation clientValidation;
     private final CarServiceValidation carServiceValidation;
+    private final EmailService emailService;
 
     @Override
     public ClientResponseDto save(Long clientId, Long carId, CarServiceRequestDto carServiceRequestDto) {
@@ -46,6 +48,15 @@ public class CarServiceServiceImpl implements CarServiceService {
         CarService carService = carServiceDtoMapper.toEntity(carId, carServiceRequestDto);
 
         carServiceRepository.save(carService);
+
+        // send email
+        String emailSubject = "New Car Service is added to your car";
+        String emailText = "" +
+                "Dear " + client.getFirstName() + ", \n\n" +
+                "New Car Service has been added to your car (" + car.getRegistrationMark() + ")" +
+                "\n\n Lp, Your CarService.";
+
+        emailService.send(client.getEmail(), emailSubject, emailText);
 
         return clientDtoMapper.toDto(client);
     }
@@ -83,6 +94,15 @@ public class CarServiceServiceImpl implements CarServiceService {
 
         CarService updatedCarService = carServiceDtoMapper.toEntity(carId, carServiceId, carServiceRequestDto);
         CarService savedCarService = carServiceRepository.save(updatedCarService);
+
+        // send email
+        String emailSubject = "Your Car Service has been updated";
+        String emailText = "" +
+                "Dear " + client.getFirstName() + ", \n\n" +
+                "Car Service on your car (" + car.getRegistrationMark() + ") has been updated!" +
+                "\n\n Lp, Your CarService.";
+
+        emailService.send(client.getEmail(), emailSubject, emailText);
 
         return carServiceDtoMapper.toDto(savedCarService);
     }
