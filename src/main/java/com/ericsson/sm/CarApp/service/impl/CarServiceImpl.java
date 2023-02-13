@@ -9,13 +9,17 @@ import com.ericsson.sm.CarApp.repository.CarRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarService;
 import com.ericsson.sm.CarApp.service.mapper.CarDtoMapper;
+import com.ericsson.sm.CarApp.service.mapper.CarMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
 import com.ericsson.sm.CarApp.validation.CarValidation;
 import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.MappingTarget;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class CarServiceImpl implements CarService {
     private final ClientDtoMapper clientDtoMapper;
     private final CarValidation carValidation;
     private final ClientValidation clientValidation;
+//    private final CarMapper.INSTANCE. CarMapper.INSTANCE.;
 
     @Override
     public ClientResponseDto save(Long id, CarRequestDto carRequestDto) {
@@ -36,7 +41,8 @@ public class CarServiceImpl implements CarService {
         carValidation.validate(carRequestDto);
 
         Client client = clientRepository.getReferenceById(id);
-        Car car = carDtoMapper.toEntity(carRequestDto);
+
+        Car car = CarMapper.INSTANCE.toEntity(carRequestDto);
 
         List<com.ericsson.sm.CarApp.model.CarService> carServices = new ArrayList<>();
 
@@ -52,7 +58,7 @@ public class CarServiceImpl implements CarService {
         List<Car> cars = carRepository.findAll();
         List<CarResponseDto> savedCars = new ArrayList<>();
         for(Car car : cars){
-            CarResponseDto carResponseDto = carDtoMapper.toDto(car);
+            CarResponseDto carResponseDto = CarMapper.INSTANCE.toDto(car);
             savedCars.add(carResponseDto);
         }
         return savedCars;
@@ -62,7 +68,7 @@ public class CarServiceImpl implements CarService {
     public CarResponseDto findById(Long id) {
         carValidation.existsById(id);
         Car car = carRepository.getReferenceById(id);
-        return carDtoMapper.toDto(car);
+        return CarMapper.INSTANCE.toDto(car);
     }
 
     @Override
@@ -79,9 +85,12 @@ public class CarServiceImpl implements CarService {
         clientValidation.existsById(clientId);
         carValidation.existsById(carId);
 
-        Car car = carDtoMapper.toEntity(carId, carRequestDto);
+        Car car = carRepository.getReferenceById(carId);
+
+        car = CarMapper.INSTANCE.toEntity(car, carRequestDto);
+
         Car savedCar = carRepository.save(car);
 
-        return carDtoMapper.toDto(savedCar);
+        return CarMapper.INSTANCE.toDto(savedCar);
     }
 }
