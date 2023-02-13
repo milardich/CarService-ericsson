@@ -7,6 +7,7 @@ import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
 import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
+import com.ericsson.sm.CarApp.service.mapper.ClientMapper;
 import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,26 +28,26 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto save(ClientRequestDto clientRequestDto) {
-        Client client = clientDtoMapper.toEntity(clientRequestDto);
+        Client client = ClientMapper.INSTANCE.toEntity(clientRequestDto);
 
         clientValidation.validate(client);
         client.setCars(new ArrayList<Car>());
         Client savedClient = clientRepository.save(client);
-        return clientDtoMapper.toDto(savedClient);
+        return ClientMapper.INSTANCE.toDto(savedClient);
     }
 
     @Override
     public Page<ClientResponseDto> getAll(String firstName, String lastName, Pageable pageable) {
         return clientRepository.findByFirstOrLastName_sortedByLastNameASC(
                 firstName, lastName, pageable
-        ).map(clientDtoMapper::toDto);
+        ).map(ClientMapper.INSTANCE::toDto);
     }
 
     @Override
     public ClientResponseDto findById(Long id) {
         clientValidation.existsById(id);
         Client client = clientRepository.getReferenceById(id);
-        return clientDtoMapper.toDto(client);
+        return ClientMapper.INSTANCE.toDto(client);
     }
 
     @Override
@@ -59,10 +60,11 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto) {
         clientValidation.existsById(id);
-        Client client = clientDtoMapper.toEntity(id, clientRequestDto);
+        Client client = clientRepository.getReferenceById(id);
+        client = ClientMapper.INSTANCE.toEntity(client, clientRequestDto);
         ClientResponseDto clientResponseDto;
         Client savedClient = clientRepository.save(client);
-        clientResponseDto = clientDtoMapper.toDto(savedClient);
+        clientResponseDto = ClientMapper.INSTANCE.toDto(savedClient);
         return clientResponseDto;
     }
 }
