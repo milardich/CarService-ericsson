@@ -8,18 +8,14 @@ import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.CarRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarService;
-import com.ericsson.sm.CarApp.service.mapper.CarDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.CarMapper;
-import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
+import com.ericsson.sm.CarApp.service.mapper.ClientMapper;
 import com.ericsson.sm.CarApp.validation.CarValidation;
 import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.MappingTarget;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +24,9 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
-    private final CarDtoMapper carDtoMapper;
     private final ClientRepository clientRepository;
-    private final ClientDtoMapper clientDtoMapper;
     private final CarValidation carValidation;
     private final ClientValidation clientValidation;
-//    private final CarMapper.INSTANCE. CarMapper.INSTANCE.;
 
     @Override
     public ClientResponseDto save(Long id, CarRequestDto carRequestDto) {
@@ -50,7 +43,7 @@ public class CarServiceImpl implements CarService {
         car.setClient(client);
         carRepository.save(car);
 
-        return clientDtoMapper.toDto(client);
+        return ClientMapper.INSTANCE.toDto(client);
     }
 
     @Override

@@ -9,9 +9,7 @@ import com.ericsson.sm.CarApp.repository.CarServiceRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarServiceService;
 import com.ericsson.sm.CarApp.service.EmailService;
-import com.ericsson.sm.CarApp.service.mapper.CarServiceDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.CarServiceMapper;
-import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientMapper;
 import com.ericsson.sm.CarApp.validation.CarServiceValidation;
 import com.ericsson.sm.CarApp.validation.CarValidation;
@@ -28,8 +26,6 @@ public class CarServiceServiceImpl implements CarServiceService {
     private final CarServiceRepository carServiceRepository;
     private final ClientRepository clientRepository;
     private final CarRepository carRepository;
-    private final ClientDtoMapper clientDtoMapper;
-    private final CarServiceDtoMapper carServiceDtoMapper;
     private final CarValidation carValidation;
     private final ClientValidation clientValidation;
     private final CarServiceValidation carServiceValidation;

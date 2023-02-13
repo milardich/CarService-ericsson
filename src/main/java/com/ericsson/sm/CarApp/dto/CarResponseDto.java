@@ -3,7 +3,6 @@ package com.ericsson.sm.CarApp.dto;
 import com.ericsson.sm.CarApp.model.enumeration.CarType;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter

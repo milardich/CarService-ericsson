@@ -4,7 +4,6 @@ import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.dto.CarResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 public interface CarService {

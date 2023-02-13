@@ -2,11 +2,9 @@ package com.ericsson.sm.CarApp.service.impl;
 
 import com.ericsson.sm.CarApp.dto.ClientRequestDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
-import com.ericsson.sm.CarApp.model.Car;
 import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.ClientService;
-import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
 import com.ericsson.sm.CarApp.service.mapper.ClientMapper;
 import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 
 @Service
@@ -23,7 +20,6 @@ import java.util.ArrayList;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
-    private final ClientDtoMapper clientDtoMapper;
     private final ClientValidation clientValidation;
 
     @Override
@@ -31,7 +27,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = ClientMapper.INSTANCE.toEntity(clientRequestDto);
 
         clientValidation.validate(client);
-        client.setCars(new ArrayList<Car>());
+        client.setCars(new ArrayList<>());
         Client savedClient = clientRepository.save(client);
         return ClientMapper.INSTANCE.toDto(savedClient);
     }

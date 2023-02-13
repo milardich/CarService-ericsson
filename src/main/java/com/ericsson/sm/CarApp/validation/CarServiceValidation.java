@@ -3,7 +3,6 @@ package com.ericsson.sm.CarApp.validation;
 import com.ericsson.sm.CarApp.repository.CarServiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EntityNotFoundException;
 
 @Component

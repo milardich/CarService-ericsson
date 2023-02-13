@@ -7,7 +7,6 @@ import com.ericsson.sm.CarApp.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import javax.persistence.EntityNotFoundException;
 
 @Component
