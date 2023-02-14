@@ -8,8 +8,8 @@ import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.repository.CarRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.CarService;
-import com.ericsson.sm.CarApp.service.mapper.CarDtoMapper;
-import com.ericsson.sm.CarApp.service.mapper.ClientDtoMapper;
+import com.ericsson.sm.CarApp.service.mapper.CarMapper;
+import com.ericsson.sm.CarApp.service.mapper.ClientMapper;
 import com.ericsson.sm.CarApp.validation.CarValidation;
 import com.ericsson.sm.CarApp.validation.ClientValidation;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +24,11 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
-    private final CarDtoMapper carDtoMapper;
     private final ClientRepository clientRepository;
-    private final ClientDtoMapper clientDtoMapper;
     private final CarValidation carValidation;
     private final ClientValidation clientValidation;
+    private final CarMapper carMapper;
+    private final ClientMapper clientMapper;
 
     @Override
     public ClientResponseDto save(Long id, CarRequestDto carRequestDto) {
@@ -36,7 +36,8 @@ public class CarServiceImpl implements CarService {
         carValidation.validate(carRequestDto);
 
         Client client = clientRepository.getReferenceById(id);
-        Car car = carDtoMapper.toEntity(carRequestDto);
+
+        Car car = carMapper.toEntity(carRequestDto);
 
         List<com.ericsson.sm.CarApp.model.CarService> carServices = new ArrayList<>();
 
@@ -44,7 +45,7 @@ public class CarServiceImpl implements CarService {
         car.setClient(client);
         carRepository.save(car);
 
-        return clientDtoMapper.toDto(client);
+        return clientMapper.toDto(client);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class CarServiceImpl implements CarService {
         List<Car> cars = carRepository.findAll();
         List<CarResponseDto> savedCars = new ArrayList<>();
         for(Car car : cars){
-            CarResponseDto carResponseDto = carDtoMapper.toDto(car);
+            CarResponseDto carResponseDto = carMapper.toDto(car);
             savedCars.add(carResponseDto);
         }
         return savedCars;
@@ -62,7 +63,7 @@ public class CarServiceImpl implements CarService {
     public CarResponseDto findById(Long id) {
         carValidation.existsById(id);
         Car car = carRepository.getReferenceById(id);
-        return carDtoMapper.toDto(car);
+        return carMapper.toDto(car);
     }
 
     @Override
@@ -79,9 +80,12 @@ public class CarServiceImpl implements CarService {
         clientValidation.existsById(clientId);
         carValidation.existsById(carId);
 
-        Car car = carDtoMapper.toEntity(carId, carRequestDto);
+        Car car = carRepository.getReferenceById(carId);
+
+        car = carMapper.toEntity(car, carRequestDto);
+
         Car savedCar = carRepository.save(car);
 
-        return carDtoMapper.toDto(savedCar);
+        return carMapper.toDto(savedCar);
     }
 }
