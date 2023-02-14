@@ -3,15 +3,14 @@ package com.ericsson.sm.CarApp.service.mapper;
 import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.dto.CarResponseDto;
 import com.ericsson.sm.CarApp.model.Car;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface CarMapper {
-
-    CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
 
     @Mapping(target = "carType", source = "carType")
     @Mapping(target = "manufactureYear", source = "manufactureYear")

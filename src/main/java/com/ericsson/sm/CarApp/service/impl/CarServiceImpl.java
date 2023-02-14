@@ -27,6 +27,8 @@ public class CarServiceImpl implements CarService {
     private final ClientRepository clientRepository;
     private final CarValidation carValidation;
     private final ClientValidation clientValidation;
+    private final CarMapper carMapper;
+    private final ClientMapper clientMapper;
 
     @Override
     public ClientResponseDto save(Long id, CarRequestDto carRequestDto) {
@@ -35,7 +37,7 @@ public class CarServiceImpl implements CarService {
 
         Client client = clientRepository.getReferenceById(id);
 
-        Car car = CarMapper.INSTANCE.toEntity(carRequestDto);
+        Car car = carMapper.toEntity(carRequestDto);
 
         List<com.ericsson.sm.CarApp.model.CarService> carServices = new ArrayList<>();
 
@@ -43,7 +45,7 @@ public class CarServiceImpl implements CarService {
         car.setClient(client);
         carRepository.save(car);
 
-        return ClientMapper.INSTANCE.toDto(client);
+        return clientMapper.toDto(client);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class CarServiceImpl implements CarService {
         List<Car> cars = carRepository.findAll();
         List<CarResponseDto> savedCars = new ArrayList<>();
         for(Car car : cars){
-            CarResponseDto carResponseDto = CarMapper.INSTANCE.toDto(car);
+            CarResponseDto carResponseDto = carMapper.toDto(car);
             savedCars.add(carResponseDto);
         }
         return savedCars;
@@ -61,7 +63,7 @@ public class CarServiceImpl implements CarService {
     public CarResponseDto findById(Long id) {
         carValidation.existsById(id);
         Car car = carRepository.getReferenceById(id);
-        return CarMapper.INSTANCE.toDto(car);
+        return carMapper.toDto(car);
     }
 
     @Override
@@ -80,10 +82,10 @@ public class CarServiceImpl implements CarService {
 
         Car car = carRepository.getReferenceById(carId);
 
-        car = CarMapper.INSTANCE.toEntity(car, carRequestDto);
+        car = carMapper.toEntity(car, carRequestDto);
 
         Car savedCar = carRepository.save(car);
 
-        return CarMapper.INSTANCE.toDto(savedCar);
+        return carMapper.toDto(savedCar);
     }
 }

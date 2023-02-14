@@ -30,6 +30,8 @@ public class CarServiceServiceImpl implements CarServiceService {
     private final ClientValidation clientValidation;
     private final CarServiceValidation carServiceValidation;
     private final EmailService emailService;
+    private final CarServiceMapper carServiceMapper;
+    private final ClientMapper clientMapper;
 
     @Override
     public ClientResponseDto save(Long clientId, Long carId, CarServiceRequestDto carServiceRequestDto) {
@@ -43,7 +45,7 @@ public class CarServiceServiceImpl implements CarServiceService {
             throw new EntityNotFoundException("Client with id " + clientId + " does not own that car");
         }
 
-        CarService carService = CarServiceMapper.INSTANCE.toEntity(carServiceRequestDto);
+        CarService carService = carServiceMapper.toEntity(carServiceRequestDto);
         carService.setCar(car);
 
         carServiceRepository.save(carService);
@@ -57,7 +59,7 @@ public class CarServiceServiceImpl implements CarServiceService {
 
         emailService.send(client.getEmail(), emailSubject, emailText);
 
-        return ClientMapper.INSTANCE.toDto(client);
+        return clientMapper.toDto(client);
     }
 
 
@@ -91,7 +93,7 @@ public class CarServiceServiceImpl implements CarServiceService {
 
         clientValidation.checkIfClientOwnsCarAndCarHasCarService(client, car, carService);
 
-        CarService updatedCarService = CarServiceMapper.INSTANCE.toEntity(carService, carServiceRequestDto);
+        CarService updatedCarService = carServiceMapper.toEntity(carService, carServiceRequestDto);
 
         CarService savedCarService = carServiceRepository.save(updatedCarService);
 
@@ -104,7 +106,7 @@ public class CarServiceServiceImpl implements CarServiceService {
 
         emailService.send(client.getEmail(), emailSubject, emailText);
 
-        return CarServiceMapper.INSTANCE.toDto(savedCarService);
+        return carServiceMapper.toDto(savedCarService);
     }
 
     @Override

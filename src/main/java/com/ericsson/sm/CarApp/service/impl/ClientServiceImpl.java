@@ -21,29 +21,30 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final ClientValidation clientValidation;
+    private final ClientMapper clientMapper;
 
     @Override
     public ClientResponseDto save(ClientRequestDto clientRequestDto) {
-        Client client = ClientMapper.INSTANCE.toEntity(clientRequestDto);
+        Client client = clientMapper.toEntity(clientRequestDto);
 
         clientValidation.validate(client);
         client.setCars(new ArrayList<>());
         Client savedClient = clientRepository.save(client);
-        return ClientMapper.INSTANCE.toDto(savedClient);
+        return clientMapper.toDto(savedClient);
     }
 
     @Override
     public Page<ClientResponseDto> getAll(String firstName, String lastName, Pageable pageable) {
         return clientRepository.findByFirstOrLastName_sortedByLastNameASC(
                 firstName, lastName, pageable
-        ).map(ClientMapper.INSTANCE::toDto);
+        ).map(clientMapper::toDto);
     }
 
     @Override
     public ClientResponseDto findById(Long id) {
         clientValidation.existsById(id);
         Client client = clientRepository.getReferenceById(id);
-        return ClientMapper.INSTANCE.toDto(client);
+        return clientMapper.toDto(client);
     }
 
     @Override
@@ -57,10 +58,10 @@ public class ClientServiceImpl implements ClientService {
     public ClientResponseDto updateById(Long id, ClientRequestDto clientRequestDto) {
         clientValidation.existsById(id);
         Client client = clientRepository.getReferenceById(id);
-        client = ClientMapper.INSTANCE.toEntity(client, clientRequestDto);
+        client = clientMapper.toEntity(client, clientRequestDto);
         ClientResponseDto clientResponseDto;
         Client savedClient = clientRepository.save(client);
-        clientResponseDto = ClientMapper.INSTANCE.toDto(savedClient);
+        clientResponseDto = clientMapper.toDto(savedClient);
         return clientResponseDto;
     }
 }
