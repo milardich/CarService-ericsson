@@ -1,9 +1,14 @@
 package com.ericsson.sm.CarApp.controllers;
 
+import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.dto.CarResponseDto;
+
+import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.model.Car;
+import com.ericsson.sm.CarApp.model.Client;
 import com.ericsson.sm.CarApp.model.enumeration.CarType;
 import com.ericsson.sm.CarApp.service.impl.CarServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +17,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.result.RequestResultMatchers;
+import org.yaml.snakeyaml.util.EnumUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.hibernate.id.IdentifierGeneratorHelper.get;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -37,7 +37,7 @@ public class CarControllerTest {
     private CarServiceImpl carService;
 
     @Test
-    void getAllCarsOkTest() throws Exception {
+    void testGetAllCars_returnOk() throws Exception {
 
         CarResponseDto carDto = new CarResponseDto();
         carDto.setCarType(CarType.BMW_3);
@@ -46,7 +46,7 @@ public class CarControllerTest {
         carDto.setColor("red");
         carDto.setCarServices(new ArrayList<>());
 
-        List<CarResponseDto> cars = List.of(carDto);
+        List<CarResponseDto> cars = List.of(carDto, carDto);
 
         Mockito.when(carService.getAll()).thenReturn(cars);
 
@@ -57,7 +57,7 @@ public class CarControllerTest {
     }
 
     @Test
-    void getCarByIdOkTest() throws Exception {
+    void testGetCarById_returnOk() throws Exception {
 
         CarResponseDto carDto = new CarResponseDto();
         carDto.setCarType(CarType.BMW_3);
@@ -70,6 +70,50 @@ public class CarControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/cars/34").accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void testSaveCar_returnClientResponse() throws Exception{
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        CarRequestDto carRequestDto = new CarRequestDto();
+        carRequestDto.setRegistrationMark("TE 577 ES");
+        carRequestDto.setColor("TEST");
+        carRequestDto.setManufactureYear(9999);
+        carRequestDto.setCarType("OPEL_ASTRA");
+
+        Client client = new Client();
+        client.setFirstName("TEST_CLIENT");
+        client.setId(55L);
+
+        Car car = new Car();
+        car.setRegistrationMark(carRequestDto.getRegistrationMark());
+        car.setCarType(CarType.OPEL_ASTRA);
+        car.setManufactureYear(carRequestDto.getManufactureYear());
+        car.setColor(carRequestDto.getColor());
+        car.setClient(client);
+
+        CarResponseDto carResponseDto = new CarResponseDto();
+        carResponseDto.setCarType(car.getCarType());
+        carResponseDto.setManufactureYear(car.getManufactureYear());
+        carResponseDto.setRegistrationMark(car.getRegistrationMark());
+        carResponseDto.setColor(car.getColor());
+        carResponseDto.setCarServices(new ArrayList<>());
+
+        ClientResponseDto clientResponseDto = new ClientResponseDto();
+        clientResponseDto.setFirstName(client.getFirstName());
+        clientResponseDto.setCars(new ArrayList<>());
+        clientResponseDto.getCars().add(carResponseDto);
+
+        Mockito.when(carService.save(Mockito.anyLong(), Mockito.any(CarRequestDto.class))).thenReturn(clientResponseDto);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/customers/55/cars")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(carRequestDto)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.cars[*].registrationMark")
+                        .value(carRequestDto.getRegistrationMark()))
                 .andDo(print());
     }
 }
