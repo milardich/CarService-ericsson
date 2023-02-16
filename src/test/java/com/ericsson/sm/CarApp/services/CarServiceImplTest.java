@@ -2,9 +2,11 @@ package com.ericsson.sm.CarApp.services;
 
 import com.ericsson.sm.CarApp.dto.CarRequestDto;
 import com.ericsson.sm.CarApp.dto.CarResponseDto;
+import com.ericsson.sm.CarApp.dto.CarServiceResponseDto;
 import com.ericsson.sm.CarApp.dto.ClientResponseDto;
 import com.ericsson.sm.CarApp.model.Car;
 import com.ericsson.sm.CarApp.model.Client;
+import com.ericsson.sm.CarApp.model.enumeration.CarType;
 import com.ericsson.sm.CarApp.repository.CarRepository;
 import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.impl.CarServiceImpl;
@@ -98,4 +100,39 @@ public class CarServiceImplTest {
         Assert.assertEquals(expectedCarRequestDto.getRegistrationMark(), actualSavedClientResponse.getCars().get(0).getRegistrationMark());
     }
 
+
+    @Test
+    void testUpdateCarById_returnOkWIthCarResponseDto(){
+
+        CarRequestDto expectedCarRequestDto = new CarRequestDto();
+        expectedCarRequestDto.setCarType("BMW_3");
+        expectedCarRequestDto.setColor("Blue");
+        expectedCarRequestDto.setManufactureYear(2018);
+        expectedCarRequestDto.setRegistrationMark("RR 555 TT");
+
+        Car car = new Car();
+        car.setId(2L);
+        car.setRegistrationMark("WW 222 WW");
+        car.setCarServices(new ArrayList<>());
+
+        CarResponseDto carResponseDto = new CarResponseDto();
+        carResponseDto.setCarType(CarType.BMW_3);
+        carResponseDto.setColor("Blue");
+        carResponseDto.setManufactureYear(2018);
+        carResponseDto.setRegistrationMark("RR 555 TT");
+
+        Mockito.doNothing().when(clientValidation).existsById(Mockito.anyLong());
+        Mockito.doNothing().when(carValidation).existsById(Mockito.anyLong());
+        Mockito.when(carRepository.getReferenceById(Mockito.anyLong())).thenReturn(car);
+        Mockito.when(carMapper.toEntity(Mockito.any(Car.class), Mockito.any(CarRequestDto.class))).thenReturn(car);
+        Mockito.when(carRepository.save(Mockito.any(Car.class))).thenReturn(car);
+        Mockito.when(carMapper.toDto(car)).thenReturn(carResponseDto);
+
+        CarResponseDto actualUpdatedCarResponse = carService.updateById(55L, 66L, expectedCarRequestDto);
+
+        Assert.assertEquals(expectedCarRequestDto.getManufactureYear(), actualUpdatedCarResponse.getManufactureYear());
+        Assert.assertEquals(expectedCarRequestDto.getCarType(), actualUpdatedCarResponse.getCarType().toString());
+        Assert.assertEquals(expectedCarRequestDto.getColor(), actualUpdatedCarResponse.getColor());
+        Assert.assertEquals(expectedCarRequestDto.getRegistrationMark(), actualUpdatedCarResponse.getRegistrationMark());
+    }
 }
