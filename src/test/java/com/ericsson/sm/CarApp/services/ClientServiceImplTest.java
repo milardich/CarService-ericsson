@@ -17,6 +17,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+
 @ExtendWith(MockitoExtension.class)
 public class ClientServiceImplTest {
 
@@ -74,5 +76,73 @@ public class ClientServiceImplTest {
         ClientResponseDto actualSavedClientResponse = clientService.save(expectedClientRequestDto);
 
         Assert.assertEquals(expectedClientRequestDto.getOib(), actualSavedClientResponse.getOib());
+    }
+
+    @Test
+    void testFindClientById_returnOkWithClientResponse(){
+        ClientResponseDto clientResponseDto = new ClientResponseDto();
+        clientResponseDto.setOib("12345678910");
+
+        Client client = new Client();
+        client.setId(55L);
+        client.setOib("12345678910");
+
+        Mockito.doNothing().when(clientValidation).existsById(Mockito.anyLong());
+        Mockito.when(clientRepository.getReferenceById(Mockito.anyLong())).thenReturn(client);
+        Mockito.when(clientMapper.toDto(Mockito.any(Client.class))).thenReturn(clientResponseDto);
+
+        ClientResponseDto actualClient = clientService.findById(55L);
+
+        Assert.assertEquals(client.getOib(), actualClient.getOib());
+    }
+
+    @Test
+    void testUpdateClientById_returnOkWithClientResponse(){
+
+        ClientRequestDto clientRequestDto = new ClientRequestDto();
+        clientRequestDto.setOib("11122233344");
+        clientRequestDto.setEmail("test@test.com");
+        clientRequestDto.setFirstName("testFirstName");
+        clientRequestDto.setLastName("testLastName");
+        clientRequestDto.setCity("Osijek");
+        clientRequestDto.setCountry("Croatia");
+        clientRequestDto.setNumber("99a");
+        clientRequestDto.setZipCode("31000");
+        clientRequestDto.setStreet("TestUlica");
+
+        ClientResponseDto clientResponseDto = new ClientResponseDto();
+        clientResponseDto.setOib("11122233344");
+        clientResponseDto.setEmail("test@test.com");
+        clientResponseDto.setFirstName("testFirstName");
+        clientResponseDto.setLastName("testLastName");
+        clientResponseDto.setCity("Osijek");
+        clientResponseDto.setCountry("Croatia");
+        clientResponseDto.setNumber("99a");
+        clientResponseDto.setZipCode("31000");
+        clientResponseDto.setStreet("TestUlica");
+        clientResponseDto.setCars(new ArrayList<>());
+
+        Client client = new Client();
+        client.setId(55L);
+        client.setOib("11122233344");
+        client.setCars(new ArrayList<>());
+
+        Mockito.doNothing().when(clientValidation).existsById(Mockito.anyLong());
+        Mockito.when(clientRepository.getReferenceById(Mockito.anyLong())).thenReturn(client);
+        Mockito.when(clientMapper.toEntity(Mockito.any(Client.class), Mockito.any(ClientRequestDto.class))).thenReturn(client);
+        Mockito.when(clientRepository.save(Mockito.any(Client.class))).thenReturn(client);
+        Mockito.when(clientMapper.toDto(Mockito.any(Client.class))).thenReturn(clientResponseDto);
+
+        ClientResponseDto actualClientResponse = clientService.updateById(55L, clientRequestDto);
+
+        Assert.assertEquals(clientRequestDto.getOib(), actualClientResponse.getOib());
+        Assert.assertEquals(clientRequestDto.getEmail(), actualClientResponse.getEmail());
+        Assert.assertEquals(clientRequestDto.getCity(), actualClientResponse.getCity());
+        Assert.assertEquals(clientRequestDto.getCountry(), actualClientResponse.getCountry());
+        Assert.assertEquals(clientRequestDto.getNumber(), actualClientResponse.getNumber());
+        Assert.assertEquals(clientRequestDto.getFirstName(), actualClientResponse.getFirstName());
+        Assert.assertEquals(clientRequestDto.getLastName(), actualClientResponse.getLastName());
+        Assert.assertEquals(clientRequestDto.getStreet(), actualClientResponse.getStreet());
+        Assert.assertEquals(clientRequestDto.getZipCode(), actualClientResponse.getZipCode());
     }
 }
