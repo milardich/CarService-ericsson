@@ -4,7 +4,6 @@ import com.ericsson.sm.CarApp.dto.*;
 import com.ericsson.sm.CarApp.service.impl.CarServiceServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
