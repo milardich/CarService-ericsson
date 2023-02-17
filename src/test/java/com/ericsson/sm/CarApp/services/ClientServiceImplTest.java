@@ -7,8 +7,8 @@ import com.ericsson.sm.CarApp.repository.ClientRepository;
 import com.ericsson.sm.CarApp.service.impl.ClientServiceImpl;
 import com.ericsson.sm.CarApp.service.mapper.ClientMapper;
 import com.ericsson.sm.CarApp.validation.ClientValidation;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -75,7 +75,7 @@ public class ClientServiceImplTest {
 
         ClientResponseDto actualSavedClientResponse = clientService.save(expectedClientRequestDto);
 
-        Assert.assertEquals(expectedClientRequestDto.getOib(), actualSavedClientResponse.getOib());
+        Assertions.assertEquals(expectedClientRequestDto.getOib(), actualSavedClientResponse.getOib());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class ClientServiceImplTest {
 
         ClientResponseDto actualClient = clientService.findById(55L);
 
-        Assert.assertEquals(client.getOib(), actualClient.getOib());
+        Assertions.assertEquals(client.getOib(), actualClient.getOib());
     }
 
     @Test
@@ -135,14 +135,14 @@ public class ClientServiceImplTest {
 
         ClientResponseDto actualClientResponse = clientService.updateById(55L, clientRequestDto);
 
-        Assert.assertEquals(clientRequestDto.getOib(), actualClientResponse.getOib());
-        Assert.assertEquals(clientRequestDto.getEmail(), actualClientResponse.getEmail());
-        Assert.assertEquals(clientRequestDto.getCity(), actualClientResponse.getCity());
-        Assert.assertEquals(clientRequestDto.getCountry(), actualClientResponse.getCountry());
-        Assert.assertEquals(clientRequestDto.getNumber(), actualClientResponse.getNumber());
-        Assert.assertEquals(clientRequestDto.getFirstName(), actualClientResponse.getFirstName());
-        Assert.assertEquals(clientRequestDto.getLastName(), actualClientResponse.getLastName());
-        Assert.assertEquals(clientRequestDto.getStreet(), actualClientResponse.getStreet());
-        Assert.assertEquals(clientRequestDto.getZipCode(), actualClientResponse.getZipCode());
+        Assertions.assertEquals(clientRequestDto.getOib(), actualClientResponse.getOib());
+        Assertions.assertEquals(clientRequestDto.getEmail(), actualClientResponse.getEmail());
+        Assertions.assertEquals(clientRequestDto.getCity(), actualClientResponse.getCity());
+        Assertions.assertEquals(clientRequestDto.getCountry(), actualClientResponse.getCountry());
+        Assertions.assertEquals(clientRequestDto.getNumber(), actualClientResponse.getNumber());
+        Assertions.assertEquals(clientRequestDto.getFirstName(), actualClientResponse.getFirstName());
+        Assertions.assertEquals(clientRequestDto.getLastName(), actualClientResponse.getLastName());
+        Assertions.assertEquals(clientRequestDto.getStreet(), actualClientResponse.getStreet());
+        Assertions.assertEquals(clientRequestDto.getZipCode(), actualClientResponse.getZipCode());
     }
 }
